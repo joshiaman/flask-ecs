@@ -1,0 +1,24 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region ca-central-1 | docker login --username AWS --password-stdin 727646477053.dkr.ecr.ca-central-1.amazonaws.com
+      - echo Setting IMAGE_TAG from source version...
+      - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building Docker image...
+      - docker build -t joshi-assign3-ecr .
+      - docker tag joshi-assign3-ecr:latest 727646477053.dkr.ecr.ca-central-1.amazonaws.com/joshi-assign3-ecr:latest
+  post_build:
+    commands:
+      - echo Pushing image to ECR...
+      - docker push 727646477053.dkr.ecr.ca-central-1.amazonaws.com/joshi-assign3-ecr:latest
+      - echo Docker image push complete.
+
+artifacts:
+  files:
+    - '**/*'
