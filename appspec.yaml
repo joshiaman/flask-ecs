@@ -1,9 +1,9 @@
 version: 1
 Resources:
   - TargetService:
-      Type: AWS::ECS::Service
-      Properties:
-        TaskDefinition: "REPLACE_AT_DEPLOY"
-        LoadBalancerInfo:
-          ContainerName: "joshi-assign3-flask"
-          ContainerPort: 5000
+    Type: AWS::ECS::Service
+    Properties:
+      TaskDefinition: "REPLACE_AT_DEPLOY"
+      LoadBalancerInfo:
+        ContainerName: "joshi-assign3-flask"
+        ContainerPort: 5000
