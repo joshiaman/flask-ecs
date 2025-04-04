@@ -5,20 +5,18 @@ phases:
     commands:
       - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region ca-central-1 | docker login --username AWS --password-stdin 727646477053.dkr.ecr.ca-central-1.amazonaws.com
-      - echo Setting IMAGE_TAG from source version...
-      - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=latest
   build:
     commands:
       - echo Build started on `date`
-      - echo Building Docker image...
       - docker build -t joshi-assign3-ecr .
-      - docker tag joshi-assign3-ecr:latest 727646477053.dkr.ecr.ca-central-1.amazonaws.com/joshi-assign3-ecr:latest
+      - docker tag joshi-assign3-ecr:latest 727646477053.dkr.ecr.ca-central-1.amazonaws.com/joshi-assign3-ecr:$IMAGE_TAG
   post_build:
     commands:
-      - echo Pushing image to ECR...
-      - docker push 727646477053.dkr.ecr.ca-central-1.amazonaws.com/joshi-assign3-ecr:latest
-      - echo Docker image push complete.
+      - docker push 727646477053.dkr.ecr.ca-central-1.amazonaws.com/joshi-assign3-ecr:$IMAGE_TAG
+      - echo Writing image definitions file...
+      - printf '[{"name":"joshi-container","imageUri":"727646477053.dkr.ecr.ca-central-1.amazonaws.com/joshi-assign3-ecr:%s"}]' $IMAGE_TAG > imagedefinitions.json
 
 artifacts:
   files:
-    - '**/*'
+    - imagedefinitions.json
