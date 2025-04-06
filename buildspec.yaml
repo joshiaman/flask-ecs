@@ -3,25 +3,23 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - echo Logging in to Amazon ECR...
+      - echo Logging into ECR...
       - aws ecr get-login-password --region ca-central-1 | docker login --username AWS --password-stdin 727646477053.dkr.ecr.ca-central-1.amazonaws.com
+      - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - echo Logging in to Docker Hub...
       - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
       - IMAGE_TAG=latest
-
   build:
     commands:
-      - echo Build started on `date`
+      - echo Building Docker image...
       - docker build -t joshi-assign3-ecr .
       - docker tag joshi-assign3-ecr:latest 727646477053.dkr.ecr.ca-central-1.amazonaws.com/joshi-assign3-ecr:$IMAGE_TAG
-
   post_build:
     commands:
+      - echo Pushing to ECR...
       - docker push 727646477053.dkr.ecr.ca-central-1.amazonaws.com/joshi-assign3-ecr:$IMAGE_TAG
-      - echo Writing image definitions file...
-      - printf '[{"name":"joshi-assign3-flask","imageUri":"727646477053.dkr.ecr.ca-central-1.amazonaws.com/joshi-assign3-ecr:%s"}]' $IMAGE_TAG > imagedefinitions.json
+      - echo "IMAGE_TAG=$IMAGE_TAG" > imageDetail.json
 
 artifacts:
-  files:
-    - imagedefinitions.json
-    - appspec.yaml
+  files: imageDetail.json
+
