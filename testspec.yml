@@ -9,20 +9,7 @@ phases:
       - pip install pytest
   build:
     commands:
-      - echo Running tests...
-      - pytest
-
-version: 0.2
-
-phases:
-  install:
-    runtime-versions:
-      python: 3.10
-    commands:
-      - pip install -r requirements.txt
-      - pip install pytest
-  build:
-    commands:
       - echo "Running tests..."
-      - export PYTHONPATH=$PYTHONPATH:.
-      - pytest --maxfail=1 --disable-warnings -q
+      - cd $CODEBUILD_SRC_DIR
+      - export PYTHONPATH=$CODEBUILD_SRC_DIR
+      - pytest --maxfail=1 --disable-warnings -q tests/
