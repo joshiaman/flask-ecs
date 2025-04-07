@@ -18,7 +18,7 @@ phases:
     commands:
       - echo Pushing to ECR...
       - docker push 727646477053.dkr.ecr.ca-central-1.amazonaws.com/joshi-assign3-ecr:$IMAGE_TAG
-      - echo "IMAGE_TAG=$IMAGE_TAG" > imageDetail.json
+      - printf '[{"name":"flask-container","imageUri":"727646477053.dkr.ecr.ca-central-1.amazonaws.com/joshi-assign3-ecr:%s"}]' $IMAGE_TAG > imagedefinitions.json
 
 artifacts:
   files: imageDetail.json
