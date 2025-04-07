@@ -11,3 +11,17 @@ phases:
     commands:
       - echo Running tests...
       - pytest
+
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.10
+    commands:
+      - pip install -r requirements.txt
+      - pip install pytest
+  build:
+    commands:
+      - echo "Running tests..."
+      - pytest --maxfail=1 --disable-warnings -q
