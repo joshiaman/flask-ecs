@@ -21,5 +21,5 @@ phases:
       - printf '[{"name":"flask-container","imageUri":"727646477053.dkr.ecr.ca-central-1.amazonaws.com/joshi-assign3-ecr:%s"}]' $IMAGE_TAG > imagedefinitions.json
 
 artifacts:
-  files: imageDetail.json
+  files: imagedefinitions.json
 
