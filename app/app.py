@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def hello():
-    return "Hello from Flask!"
+    return "Hello from the Joshi ECS container"
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
